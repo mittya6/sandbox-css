@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #8460ed,#ff1252);
+        }
+
+        .menu{
+            position:relative;
+            width:200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu li {
+            position: absolute;
+            left:0;
+            list-style:none;
+            transform-origin: 100px;
+            transition:0.5s;
+            transition-delay: calc(0.05s * var(--i));
+            transform: rotate(0deg) translateX(90px);
+        }
+
+        .menu li a{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background: #fff;
+        }
+
+        .menu.active li{
+            transform: rotate(calc(360deg / 8 * var(--i))) translateX(0);
+        }
+
+        .toggle{
+            position: absolute;
+            width:60px;
+            height:60px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            border-radius:50%;
+            cursor: pointer;
+            box-shadow: 0 0px 4px rgba(0,0,0,0.15);
+            font-size: 2em;
+            transition: transform 1.25s;
+        }
+
+        .menu.active .toggle{
+            transform: rotate(315deg);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="menu">
+    <div class="toggle"><ion-icon name="add-outline"></ion-icon></div>
+    <li style="--i:0;">
+        <a href="#"><ion-icon name="baseball-outline"></ion-icon></a>
+    </li>
+    <li style="--i:1;">
+        <a href="#"><ion-icon name="basketball-outline"></ion-icon></a>
+    </li>
+    <li style="--i:2;">
+        <a href="#"><ion-icon name="bicycle-outline"></ion-icon></a>
+    </li>
+    <li style="--i:3;">
+        <a href="#"><ion-icon name="barbell-outline"></ion-icon></a>
+    </li>
+    <li style="--i:4;">
+        <a href="#"><ion-icon name="barbell-outline"></ion-icon></a>
+    </li>
+    <li style="--i:5;">
+        <a href="#"><ion-icon name="barbell-outline"></ion-icon></a>
+    </li>
+    <li style="--i:6;">
+        <a href="#"><ion-icon name="barbell-outline"></ion-icon></a>
+    </li>
+    <li style="--i:7;">
+        <a href="#"><ion-icon name="barbell-outline"></ion-icon></a>
+    </li>
+</div>
+
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<script>
+    let toggle = document.querySelector('.toggle');
+    let menu = document.querySelector('.menu');
+    toggle.onclick = () =>{
+        menu.classList.toggle('active');
+    }
+
+</script>
+</body>
+</html>
