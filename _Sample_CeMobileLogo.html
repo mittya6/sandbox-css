@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height:100vh;
+            background: #0c1822;
+
+        }
+
+        h2{
+            color: #ffffff;
+            font-size: 12px;
+        }
+
+
+        h2::after{
+            content:attr(data-text-after);
+            opacity: 0;
+            visibility: hidden;
+            letter-spacing: -1em;
+            transition: 0.5s;
+        }
+
+        h2:hover::after{
+            letter-spacing: normal;
+            opacity:1;
+            visibility: visible;
+            letter-spacing: 0;
+        }
+
+        h2::before{
+            content:attr(data-text-before);
+            opacity: 0;
+            visibility: hidden;
+            letter-spacing: -1em;
+            transition: 0.5s;
+        }
+
+        h2:hover::before{
+            letter-spacing: normal;
+            opacity:1;
+            visibility: visible;
+            letter-spacing: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <h2 data-text-before="CE" data-text-after="Mobile">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+    </h2>
+</body>
+</html>
