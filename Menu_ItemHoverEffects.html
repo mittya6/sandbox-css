@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #000;
+            overflow: hidden;
+        }
+
+        ul li{
+            list-style: none;
+        }
+
+        ul li a {
+            position: relative;
+            display: block;
+            color:transparent;
+            -webkit-text-stroke: 1px #fff;
+            font-size: 5em;
+            font-weight: 900;
+            text-decoration: none;
+            line-height: 1.2em;
+        }
+
+        ul li a:hover{
+            color: #fff;
+            -webkit-text-stroke: 1px #000;
+            transition: 0.5s;
+
+        }
+
+        ul li a:before{
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: 0.5s;
+        }
+
+        ul li a:hover:before{
+            color: #f00;
+            
+        }
+    </style>
+</head>
+<body>
+
+<ul>
+    <li><a href="#" data-text="Home">Home</a></li>
+    <li><a href="#" data-text="About">About</a></li>
+    <li><a href="#" data-text="Portfolio">Portfolio</a></li>
+    <li><a href="#" data-text="Team">Team</a></li>
+    <li><a href="#" data-text="Contact">Contact</a></li>
+</ul>
+
+</body>
+</html>

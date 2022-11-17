@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        section{
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 6em;
+            font-weight: 600;
+        }
+
+        section:nth-child(even){
+            background: #efefef;
+        }
+
+        nav{
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #000;
+            text-align: center;
+            z-index: 1;
+        }
+
+        nav a {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 1.6em;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        section#one:hover ~ nav a[href="#one"],
+        section#two:hover ~ nav a[href="#two"],
+        section#three:hover ~ nav a[href="#three"],
+        section#four:hover ~ nav a[href="#four"],
+        section#five:hover ~ nav a[href="#five"]
+        {
+            background: #fff;
+            color: #000;
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <section id="one">One</section>
+    <section id="two">Two</section>
+    <section id="three">Three</section>
+    <section id="four">Four</section>
+    <section id="five">Five</section>
+    <nav>
+        <a href="#one">One</a>
+        <a href="#two">Two</a>
+        <a href="#three">Three</a>
+        <a href="#four">Four</a>
+        <a href="#five">Five</a>
+
+    </nav>
+</body>
+</html>
