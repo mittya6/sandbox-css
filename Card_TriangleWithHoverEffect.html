@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+    <!-- https://www.youtube.com/watch?v=e6x-VrY2nJ4 -->
+    <!-- https://bennettfeely.com/clippy/ -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container{
+            position:relative;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            width:600px;
+            column-gap: 0px;
+        }
+
+        .container .card{
+            position: relative;
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+            margin: 0 -70px;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+
+        }
+
+        .container .card:nth-child(2){
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+
+        }
+
+        .container .card img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s ease-in-out;
+        }
+
+        .container .card:hover img{
+            transform: scale(1.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="card">
+            <img src="kaigoIMGL7699_TP_V4.jpg">
+        </div>
+        <div class="card">
+            <img src="kaigoIMGL7699_TP_V4.jpg">
+        </div>
+        <div class="card">
+            <img src="kaigoIMGL7699_TP_V4.jpg">
+        </div>
+        <div class="card">
+            <img src="kaigoIMGL7699_TP_V4.jpg">
+        </div>
+    </div>
+
+</body>
+</html>
