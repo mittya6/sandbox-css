@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #222;
+        }
+    </style>
+</head>
+
+<body>
+
+    <svg width="600" height="450" viewBox="0 0 600 450">
+        <filter id="myFilter">
+            <feGaussianBlur stdDeviation="5"></feGaussianBlur>
+        </filter>
+        <image xlink:href="kaigoIMGL7699_TP_V4.jpg" width="100%" height="100%" x="0" y="0" filter="url(#myFilter)">
+        </image>
+    </svg>
+
+    <svg>
+        <filter id="wavy">
+            <feTurbulence x="0" y="0" baseFrequency="0.009" numOctaves="5" seed="2">
+                <animate attributeName="baseFrequency" dur="60s" values="0.02;0.05;0.02" repeatCount="indefinite">
+                </animate>
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="30"></feDisplacementMap>
+        </filter>
+
+        <image xlink:href="kaigoIMGL7699_TP_V4.jpg" width="100%" height="100%" x="0" y="0" filter="url(#wavy)">
+        </image>
+    </svg>
+
+    <svg>
+        <filter id="squiggly">
+            <feTurbulence type="fractalNoise" id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise"
+                seed="0" >
+                <animate attributeName="seed" dur="0.34s" values="0;2;3;4" repeatCount="indefinite"></animate>
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" >
+                <animate attributeName="scale" dur="0.34s" values="4;4;6;4" repeatCount="indefinite"></animate>
+            </feDisplacementMap>
+        </filter>
+        <image xlink:href="kaigoIMGL7699_TP_V4.jpg" width="100%" height="100%" x="0" y="0" filter="url(#squiggly)">
+            </image>
+    </svg>
+</body>
+
+</html>
