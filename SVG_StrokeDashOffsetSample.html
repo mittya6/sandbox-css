@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(to right, #0d2c29, #000);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        svr>* {
+            stroke: none;
+        }
+    </style>
+</head>
+
+<body>
+    <svg viewBox="-3 0 33 10" xmlns="http://www.w3.org/2000/svg">
+        <!-- No dash array -->
+        <line x1="0" y1="1" x2="30" y2="1" stroke="red" />
+
+        <!-- No dash offset -->
+        <line x1="0" y1="3" x2="30" y2="3" stroke="red" stroke-dasharray="3 1" />
+
+        <!--
+        The start of the dash array computation
+        is pulled by 3 user units
+        -->
+        <line x1="0" y1="5" x2="30" y2="5" stroke="red" stroke-dasharray="3 1" stroke-dashoffset="3" />
+
+        <!--
+        The start of the dash array computation
+        is pushed by 3 user units
+        -->
+        <line x1="0" y1="7" x2="30" y2="7" stroke="red" stroke-dasharray="3 1" stroke-dashoffset="-3" />
+
+        <!--
+        The start of the dash array computation
+        is pulled by 1 user units which ends up
+        in the same rendering as the previous example
+        -->
+        <line x1="0" y1="9" x2="30" y2="9" stroke="red" stroke-dasharray="3 1" stroke-dashoffset="1" />
+
+        <!--
+        the following red lines highlight the
+        offset of the dash array for each line
+        -->
+        <path d="M0,5 h-3 M0,7 h3 M0,9 h-1" stroke="rgba(255,0,0,.5)" />
+    </svg>
+
+</body>
+
+</html>
