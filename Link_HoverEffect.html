@@ -1,0 +1,395 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        a.link1 {
+            position: relative;
+            color: #888;
+            margin: -0.25em;
+            padding: 0.25em;
+            text-decoration: none;
+            transition: color 0.5s;
+        }
+
+        a.link1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #54b3d6;
+            transition: transform 0.5s;
+            transform: scaleX(0);
+            transform-origin: right;
+
+            z-index: -1;
+        }
+
+        a.link1:hover {
+            color: #fff;
+        }
+
+        a.link1:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+
+
+
+
+
+        a.link2 {
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+            overflow: hidden;
+        }
+
+        a.link2::after {
+            content: attr(data-replace);
+            color: #54b3d6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            transform: translateX(100%);
+            transition: transform .2s ease-in-out;
+        }
+
+        a.link2:hover::after {
+            transform: translateX(0);
+        }
+
+        a.link2::before {
+            content: '';
+            position: absolute;
+            background-color: #54b3d6;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            transform-origin: right;
+            transform: scaleX(0);
+            transition: transform .2s ease-in-out;
+        }
+
+        a.link2:hover::before {
+            transform-origin: left;
+            transform: scaleX(1);
+        }
+
+        a.link2 span {
+            display: inline-block;
+            transition: transform .2s ease-in-out;
+            color: #888;
+        }
+
+        a.link2:hover span {
+            transform: translateX(-100%);
+        }
+
+
+
+        a.link3 {
+            text-decoration: none;
+            color: #888;
+            background:
+                linear-gradient(to right,
+                    #888,
+                    #888),
+                linear-gradient(to right,
+                    #3FCAB7,
+                    #3FCAB7);
+            background-size: 100% 3px, 0 3px;
+            background-position: 100% 100%, 0 100%;
+            background-repeat: no-repeat;
+            transition: background-size 0.4s;
+
+        }
+
+        a.link3:hover {
+            background-size: 0 3px, 100% 3px;
+        }
+
+
+
+
+        a.link4 {
+            position: relative;
+            color: #888;
+            margin: -0.25em;
+            padding: 0.25em;
+            text-decoration: none;
+            transition: color 0.5s;
+        }
+
+        a.link4::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #54b3d6;
+            transition: transform 0.5s;
+            transform: scaleX(0);
+            transform-origin: center;
+
+            z-index: -1;
+        }
+
+        a.link4:hover {
+            color: #fff;
+        }
+
+        a.link4:hover::before {
+            transform: scaleX(1);
+        }
+
+
+
+
+
+
+        a.link5 {
+            position: relative;
+            color: #888;
+            margin: -0.25em;
+            padding: 0.25em;
+            text-decoration: none;
+            background-color: #fff;
+            transition: color 0.3s;
+
+        }
+
+        a.link5::before {
+            content: '';
+            position: absolute;
+            background-color: #3FCAB7;
+            width: 0;
+            height: 0;
+            top: -2px;
+            left: -2px;
+            z-index: -1;
+            transition: all 0.3s;
+        }
+
+        a.link5::after {
+            content: '';
+            position: absolute;
+            background-color: #3FCAB7;
+            width: 0;
+            height: 0;
+            bottom: -2px;
+            right: -2px;
+            z-index: -1;
+            transition: all 0.3s;
+        }
+
+        a.link5:hover {
+            color: #3FCAB7;
+        }
+
+        a.link5:hover::before,
+        a.link5:hover::after {
+            width: 50%;
+            height: 50%;
+        }
+
+
+
+
+
+        a.link6 {
+            position: relative;
+            display: inline-block;
+            color: #888;
+            margin: -0.25em;
+            padding: 0.25em;
+            text-decoration: none;
+            background-color: #fff;
+            transition: all 0.5s;
+        }
+
+        a.link6:hover {
+            color: rgba(255, 255, 255, 1);
+        }
+
+        a.link6::before {
+            content: attr(data-replace);
+            color: #3FCAB7;
+            position: absolute;
+            width: 200%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            letter-spacing: 0.5em;
+            opacity: 0;
+            transition: all 0.5s;
+            text-align: center;
+        }
+
+        a.link6:hover::before {
+            letter-spacing: normal;
+            opacity: 1;
+
+        }
+
+
+
+        a.link7{
+            position: relative;
+            text-decoration: none;
+        }
+
+        a.link7:before{
+            content: attr(data-replace);
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            color: #3FCAB7;
+            clip-path: polygon(0 0, 0 0, 0% 100%, 0% 100%);
+            transition: all 0.5s;
+        }
+
+        a.link7:hover:before{
+            clip-path: polygon(0 0, 100% 0%, 100% 100%, 0% 100%);
+        }
+
+
+
+
+
+
+
+        a.link8{
+            position: relative;
+            text-decoration: none;
+            color: rgba(255,255,255,0);
+        }
+
+        a.link8:before{
+            content: attr(data-replace);
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            color: #888;
+
+            transform: rotateY(0);
+            backface-visibility: hidden;
+
+            transition: transform 0.5s;
+        }
+
+        a.link8:after{
+            content: attr(data-replace);
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            color: #3FCAB7;
+
+            border-bottom:2px solid #3FCAB7;
+
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+
+            transition: transform 0.5s;
+        }
+
+        a.link8:hover:before{
+            transform: rotateY(180deg);
+        }
+
+        a.link8:hover:after{
+            transform: rotateY(360deg);
+        }
+
+
+
+
+
+
+
+        a.link9{
+            position: relative;
+            text-decoration: none;
+            color: #888;
+        }
+
+        a.link9:before{
+            content: attr(data-replace);
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            color: rgba(255,255,255,0);
+
+
+            transition: all 0.5s;
+        }
+
+        a.link9:hover{
+            color: #ddd;
+
+        }
+
+        a.link9:hover:before{
+            color: #3FCAB7;
+            transform: translate(2px,2px);
+        }
+
+
+
+        
+    </style>
+</head>
+
+<body>
+    <a class="link1" href="javascript:void(0);">this link</a>
+
+    <br><br>
+
+    <a href="#" class="link2" data-replace="this link"><span>this link</span></a>
+
+    <br><br>
+
+    <a href="#" class="link3">this link</a>
+
+    <br><br>
+
+    <a href="#" class="link4">this link</a>
+
+    <br><br>
+
+    <a href="#" class="link5">this link</a>
+
+    <br><br>
+
+    <a href="#" class="link6" data-replace="this link">this link</a>
+
+    <br><br>
+
+    <a href="#" class="link7" data-replace="this link">this link</a>
+
+    <br><br>
+
+    <a href="#" class="link8" data-replace="this link">this link</a>
+
+    <br><br>
+
+    <a href="#" class="link9" data-replace="this link">this link</a>
+</body>
+
+</html>
