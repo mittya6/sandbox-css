@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="jp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #ff4f8b, #dff1ff);
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            background: #00d2ff;
+            bottom: 5%;
+            left: 10%;
+            width: 40%;
+            height: 40%;
+            filter: blur(150px);
+            z-index: -1;
+
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            background: #fffd87;
+            bottom: 10%;
+            right: 10%;
+            width: 50%;
+            height: 40%;
+            filter: blur(150px);
+            z-index: -1;
+
+        }
+    </style>
+</head>
+
+<body>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
+            overflow: hidden;
+        }
+
+        ul.bg-bubbles{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+
+            li{
+                position: absolute;
+                left: var(--left);
+                display: block;
+                list-style:none;
+                width: var(--width);
+                height: var(--width);
+                background-color: #fff;
+                bottom: -160px;
+                animation: square var(--duration) linear var(--delay) infinite forwards  , show 4s ease-in var(--delay) both;
+            }
+
+
+        }
+
+        @keyframes show {
+                0%{
+                    opacity: 0;
+                }
+                100% {
+                    opacity: 0.15;
+                }
+            }
+
+            @keyframes square {
+                0%{
+                    transform: translateY(0);
+                }
+                100% {
+                    transform: translateY(-120vh) rotate(600deg);
+                }
+            }
+
+    </style>
+</head>
+
+<body>
+
+    <ul class="bg-bubbles">
+        <li style="--left:10%;--width:40px;--duration:19s;--delay:4.4s"></li>
+        <li style="--left:20%;--width:80px;--duration:18s;--delay:6s"></li>
+        <li style="--left:25%;--width:40px;--duration:17s;--delay:3s"></li>
+        <li style="--left:40%;--width:60px;--duration:16s;--delay:8s"></li>
+        <li style="--left:70%;--width:40px;--duration:15s;--delay:3.6s"></li>
+        <li style="--left:80%;--width:120px;--duration:19s;--delay:0s"></li>
+        <li style="--left:32%;--width:160px;--duration:18s;--delay:7.4s"></li>
+        <li style="--left:55%;--width:20px;--duration:17s;--delay:4s"></li>
+        <li style="--left:25%;--width:10px;--duration:16s;--delay:2.2s"></li>
+        <li style="--left:90%;--width:160px;--duration:15s;--delay:2s"></li>
+
+    </ul>
+
+</body>
+
+</html>
