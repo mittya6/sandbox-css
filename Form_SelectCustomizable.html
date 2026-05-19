@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Option 新機能デモ</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(160deg, #1e1b4b 0%, #3730a3 55%, #4f46e5 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      padding: 48px 20px;
+    }
+
+    /* ===== ヘッダー ===== */
+    .header {
+      text-align: center;
+      color: white;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* ===== 機能チップ ===== */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Consolas', monospace;
+      font-size: 0.72rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ===== SELECT 基本設定 ===== */
+    /* この2行が新API有効化の必須コード */
+    .demo-select,
+    .demo-select::picker(select) {
+      appearance: base-select;
+    }
+
+    .demo-select {
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    /* ===== トリガーボタン ===== */
+    .demo-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: white;
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
+      font-family: inherit;
+      cursor: pointer;
+      min-width: 290px;
+    }
+
+    .demo-btn::after {
+      content: "▾";
+      margin-left: auto;
+      color: #9ca3af;
+      font-size: 0.9rem;
+      padding-left: 8px;
+    }
+
+    /* selectedcontent: ボタン内のレイアウト */
+    .demo-btn selectedcontent {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    /* ボタン内のアイコン: 小さめ */
+    .demo-btn selectedcontent .opt-icon {
+      font-size: 1.7rem;
+      width: auto;
+      flex-shrink: 0;
+    }
+
+    /* ボタン内の名前 */
+    .demo-btn selectedcontent .opt-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    /* ボタン内では説明文・タグを非表示 */
+    .demo-btn selectedcontent .opt-desc,
+    .demo-btn selectedcontent .opt-tag {
+      display: none;
+    }
+
+    /* ===== ピッカー（ドロップダウン）===== */
+    .demo-select::picker(select) {
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.15);
+      padding: 8px;
+      margin-top: 10px;
+      background: white;
+      min-width: 340px;
+      transition: scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+    }
+
+    /* 開いた状態 */
+    .demo-select::picker(select):popover-open {
+      scale: 1;
+      opacity: 1;
+    }
+
+    /* 開く直前の初期状態 → アニメーション起点 */
+    @starting-style {
+      .demo-select::picker(select):popover-open {
+        scale: 0.85;
+        opacity: 0;
+      }
+    }
+
+    /* ===== ピッカー内のオプション ===== */
+    .demo-select::picker(select) option {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 13px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .demo-select::picker(select) option:hover {
+      background: #f5f3ff;
+    }
+
+    .demo-select::picker(select) option:checked {
+      background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+    }
+
+    /* アイコン: ピッカー内では大きく表示 */
+    .opt-icon {
+      font-size: 2.6rem;
+      flex-shrink: 0;
+      width: 50px;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    /* 情報列: 縦並び */
+    .opt-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-top: 3px;
+    }
+
+    /* 名前 */
+    .opt-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.2;
+    }
+
+    /* 説明文: ピッカー内では表示 */
+    .opt-desc {
+      font-size: 0.78rem;
+      color: #6b7280;
+      line-height: 1.55;
+    }
+
+    /* タグ: ピッカー内では表示 */
+    .opt-tag {
+      display: inline-block;
+      font-size: 0.67rem;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 10px;
+      background: #ede9fe;
+      color: #7c3aed;
+      width: fit-content;
+    }
+
+    /* ===== 凡例 ===== */
+    .legend {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    .legend-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .legend-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 12px;
+      padding: 10px 16px;
+      color: white;
+      font-size: 0.78rem;
+      text-align: center;
+      min-width: 140px;
+      line-height: 1.6;
+    }
+
+    .legend-box strong {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .legend-sep {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 1.2rem;
+      padding-top: 18px;
+    }
+
+    /* ===== 注意書き ===== */
+    .notice {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 10px 20px;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Select &amp; Option 新機能デモ</h1>
+    <p class="subtitle">Chrome 134 / Edge 134 から使える CSS だけのフルカスタム選択リスト</p>
+  </div>
+
+  <div class="chips">
+    <span class="chip">appearance: base-select</span>
+    <span class="chip">::picker(select)</span>
+    <span class="chip">&lt;selectedcontent&gt;</span>
+    <span class="chip">@starting-style animation</span>
+  </div>
+
+  <!--
+    selectedcontent の仕組み:
+    - ボタン内: .opt-desc と .opt-tag を display:none で非表示
+    - ドロップダウン内: 全要素を表示
+    → 同じ HTML 構造を CSS だけで出し分けできる
+  -->
+  <select class="demo-select">
+    <button class="demo-btn">
+      <selectedcontent></selectedcontent>
+    </button>
+
+    <option value="tokyo" selected>
+      <span class="opt-icon">🗼</span>
+      <span class="opt-info">
+        <span class="opt-name">東京</span>
+        <span class="opt-desc">日本の首都。渋谷・新宿・浅草など多彩なエリアが集まる大都市。</span>
+        <span class="opt-tag">関東</span>
+      </span>
+    </option>
+
+    <option value="hokkaido">
+      <span class="opt-icon">❄️</span>
+      <span class="opt-info">
+        <span class="opt-name">北海道</span>
+        <span class="opt-desc">広大な自然と新鮮な食材の宝庫。冬は世界屈指のパウダースノー。</span>
+        <span class="opt-tag">北海道</span>
+      </span>
+    </option>
+
+    <option value="kyoto">
+      <span class="opt-icon">⛩️</span>
+      <span class="opt-info">
+        <span class="opt-name">京都</span>
+        <span class="opt-desc">千年の古都。金閣寺・嵐山・祇園など伝統文化が各所に息づく。</span>
+        <span class="opt-tag">関西</span>
+      </span>
+    </option>
+
+    <option value="osaka">
+      <span class="opt-icon">🏯</span>
+      <span class="opt-info">
+        <span class="opt-name">大阪</span>
+        <span class="opt-desc">食い倒れの街。たこ焼き・お好み焼きなど独自の食文化が豊か。</span>
+        <span class="opt-tag">関西</span>
+      </span>
+    </option>
+
+    <option value="okinawa">
+      <span class="opt-icon">🌺</span>
+      <span class="opt-info">
+        <span class="opt-name">沖縄</span>
+        <span class="opt-desc">エメラルドグリーンの海と独自の琉球文化。年間を通じて温暖。</span>
+        <span class="opt-tag">南西諸島</span>
+      </span>
+    </option>
+  </select>
+
+  <!-- selectedcontent の違いを説明 -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-box">
+        <strong>ボタン表示（selectedcontent）</strong>
+        絵文字 ＋ 地名のみ<br>説明文・タグは非表示
+      </div>
+    </div>
+    <div class="legend-sep">↔</div>
+    <div class="legend-item">
+      <div class="legend-box">
+        <strong>ドロップダウン内</strong>
+        絵文字 ＋ 地名<br>＋ 説明文 ＋ タグも表示
+      </div>
+    </div>
+  </div>
+
+  <div class="notice">
+    ⚠️ Chrome 134 / Edge 134 以降が必要です。それ以外ではネイティブ表示にフォールバックします。
+  </div>
+
+</body>
+</html>

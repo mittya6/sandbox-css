@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Only Carousel — scroll-snap + ::scroll-button + ::scroll-marker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #0f172a;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    /* ========================================
+       ラッパー：CSS Grid でボタン・マーカーを配置
+       ======================================== */
+    .carousel-wrap {
+      display: grid;
+      grid-template-areas:
+        "carousel carousel carousel"
+        "prev     markers   next";
+      grid-template-columns: 56px 1fr 56px;
+      grid-template-rows: auto 40px;
+      width: 620px;
+    }
+
+    /* ========================================
+       カルーセル本体
+       ======================================== */
+    .carousel {
+      grid-area: carousel;
+      list-style: none;
+      display: flex;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      border-radius: 20px;
+
+      /* これがないと ::scroll-marker-group が生成されない */
+      scroll-marker-group: after;
+    }
+
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ========================================
+       前へ・次へ ボタン（::scroll-button）
+       グリッドエリアに割り当てて配置
+       ======================================== */
+    .carousel::scroll-button(left),
+    .carousel::scroll-button(right) {
+      width: 40px;
+      height: 40px;
+      align-self: center;
+      justify-self: center;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255 255 255 / 0.2);
+      background: rgba(255 255 255 / 0.08);
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s, scale 0.15s;
+    }
+
+    .carousel::scroll-button(left) {
+      content: "❮";
+      grid-area: prev;
+    }
+
+    .carousel::scroll-button(right) {
+      content: "❯";
+      grid-area: next;
+    }
+
+    .carousel::scroll-button(left):hover,
+    .carousel::scroll-button(right):hover {
+      background: rgba(255 255 255 / 0.22);
+      scale: 1.1;
+    }
+
+    .carousel::scroll-button(left):disabled,
+    .carousel::scroll-button(right):disabled {
+      opacity: 0.2;
+      cursor: not-allowed;
+      scale: 1;
+    }
+
+    /* ========================================
+       ドットインジケーター（::scroll-marker）
+       ======================================== */
+    .carousel::scroll-marker-group {
+      grid-area: markers;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .carousel li::scroll-marker {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(255 255 255 / 0.28);
+      border: 1px solid rgba(255 255 255 / 0.18);
+      cursor: pointer;
+      transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+    }
+
+    /* アクティブなドットはピル型に広げて強調 */
+    .carousel li::scroll-marker:target-current {
+      background: #fff;
+      width: 28px;
+    }
+
+    /* ========================================
+       スライドアイテム
+       ======================================== */
+    .carousel li {
+      scroll-snap-align: start;
+      flex: 0 0 100%;
+    }
+
+    .slide {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 44px 48px;
+      overflow: hidden;
+    }
+
+    .slide-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .slide-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .slide-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .slide-4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+    .slide-5 { background: linear-gradient(135deg, #fa709a, #fee140); }
+
+    .slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0 0 0 / 0.52) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .slide-content {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      background: rgba(255 255 255 / 0.18);
+      border: 1px solid rgba(255 255 255 / 0.25);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .slide-title {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 12px rgba(0 0 0 / 0.2);
+    }
+
+    .slide-desc {
+      font-size: 13.5px;
+      line-height: 1.75;
+      opacity: 0.82;
+      max-width: 420px;
+    }
+
+    .deco {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255 255 255 / 0.07);
+      pointer-events: none;
+    }
+
+    .deco-a { width: 280px; height: 280px; top: -90px; right: -70px; }
+    .deco-b { width: 140px; height: 140px; top: 60px;  right: 100px; }
+    .deco-c { width: 60px;  height: 60px;  bottom: 100px; right: 60px; }
+  </style>
+</head>
+<body>
+
+  <div class="carousel-wrap">
+    <ul class="carousel">
+      <li>
+        <div class="slide slide-1">
+          <div class="deco deco-a"></div>
+          <div class="deco deco-b"></div>
+          <div class="slide-content">
+            <span class="slide-tag">CSS Only · 01 / 05</span>
+            <h2 class="slide-title">Scroll Snap<br>Carousel</h2>
+            <p class="slide-desc">scroll-snap-type でスムーズなスライド切り替えを実現。JavaScriptゼロのカルーセルUI。</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="slide slide-2">
+          <div class="deco deco-a"></div>
+          <div class="deco deco-c"></div>
+          <div class="slide-content">
+            <span class="slide-tag">CSS Only · 02 / 05</span>
+            <h2 class="slide-title">::scroll-button()<br>Pseudo Element</h2>
+            <p class="slide-desc">前へ・次へボタンをCSSの疑似要素だけで自動生成。Chrome 135 以降で対応。</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="slide slide-3">
+          <div class="deco deco-a"></div>
+          <div class="deco deco-b"></div>
+          <div class="slide-content">
+            <span class="slide-tag">CSS Only · 03 / 05</span>
+            <h2 class="slide-title">::scroll-marker<br>Dot Indicators</h2>
+            <p class="slide-desc">ドットインジケーターも li::scroll-marker で生成。scroll-marker-group: after が必須。</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="slide slide-4">
+          <div class="deco deco-a"></div>
+          <div class="slide-content">
+            <span class="slide-tag">CSS Only · 04 / 05</span>
+            <h2 class="slide-title">Keyboard<br>Accessible</h2>
+            <p class="slide-desc">role属性がブラウザにより自動設定。タブキー・矢印キー・スクリーンリーダーに完全対応。</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="slide slide-5">
+          <div class="deco deco-a"></div>
+          <div class="deco deco-b"></div>
+          <div class="deco deco-c"></div>
+          <div class="slide-content">
+            <span class="slide-tag">CSS Only · 05 / 05</span>
+            <h2 class="slide-title">CSS Grid<br>Layout</h2>
+            <p class="slide-desc">grid-template-areas でボタンとマーカーをスライドの外側にきれいに配置。</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</body>
+</html>

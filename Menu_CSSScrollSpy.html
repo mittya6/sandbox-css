@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Scroll Spy — scroll-target-group</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* スクロールコンテナに scroll-target-group を設定するだけ */
+html {
+  scroll-behavior: smooth;
+  scroll-target-group: auto;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ==============================
+   サイドナビゲーション
+============================== */
+.nav {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 256px;
+  background: #0f172a;
+  padding: 2.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 100;
+}
+
+.nav-logo {
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 2.25rem;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.nav-logo::before {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: #6366f1;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px #6366f1;
+}
+
+.nav-label {
+  color: #334155;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.5rem 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.75rem;
+  color: #475569;
+  text-decoration: none;
+  border-radius: 7px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.15s;
+  position: relative;
+}
+
+/* アイコン（丸） */
+.nav a span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+/* ========================================
+   スクロールスパイ疑似クラス
+======================================== */
+
+/* 通過済み ─ チェック表示 */
+.nav a:target-before {
+  color: #334155;
+}
+.nav a:target-before span {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+}
+.nav a:target-before span::after {
+  content: "✓";
+}
+
+/* アクティブ（現在表示中） */
+.nav a:target-current {
+  color: #e2e8f0;
+  anchor-name: --active-link; /* CSS Anchor Positioning でインジケーターの位置を渡す */
+}
+.nav a:target-current span {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+/* 未到達 */
+.nav a:target-after {
+  color: #334155;
+}
+
+/* ==============================
+   アクティブインジケーター
+   CSS Anchor Positioning で
+   アクティブリンクに追従
+============================== */
+.nav-indicator {
+  position: fixed;
+  position-anchor: --active-link;
+  top: anchor(top);
+  left: anchor(left);
+  width: anchor-size(width);
+  height: anchor-size(height);
+  background: rgba(99, 102, 241, 0.12);
+  border-left: 2px solid #6366f1;
+  border-radius: 7px;
+  pointer-events: none;
+  opacity: 0;
+  transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s;
+}
+/* アクティブリンクが存在するときのみ表示 */
+.nav:has(a:target-current) ~ .nav-indicator {
+  opacity: 1;
+}
+
+/* ==============================
+   メインコンテンツ
+============================== */
+main {
+  margin-left: 256px;
+  flex: 1;
+  counter-reset: sec;
+}
+
+section {
+  min-height: 100vh;
+  padding: clamp(3rem, 8vmax, 7rem) clamp(2rem, 7vw, 6rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  counter-increment: sec;
+}
+
+/* 背景の大きな連番 */
+section::after {
+  content: "0" counter(sec);
+  position: absolute;
+  right: 3rem;
+  bottom: 2rem;
+  font-size: 10rem;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.04);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  opacity: 0.45;
+}
+
+h2 {
+  font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.75rem;
+}
+
+.desc {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  max-width: 560px;
+  opacity: 0.65;
+}
+
+code {
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.07);
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+}
+
+/* セクションカラーテーマ */
+#intro   { background: #f8fafc; color: #0f172a; }
+#spec    { background: #f5f3ff; color: #2e1065; }
+#pseudo  { background: #f0fdf4; color: #14532d; }
+#anchor  { background: #fff7ed; color: #7c2d12; }
+#support { background: #eff6ff; color: #1e3a8a; }
+
+/* ==============================
+   未対応ブラウザ向け案内
+============================== */
+@supports not (scroll-target-group: auto) {
+  .unsupported {
+    display: flex;
+  }
+}
+.unsupported {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(8px);
+  color: #f1f5f9;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  padding: 2rem;
+  z-index: 999;
+}
+.unsupported h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.unsupported p {
+  opacity: 0.65;
+  max-width: 380px;
+  line-height: 1.75;
+}
+.unsupported .badge {
+  display: inline-block;
+  background: #6366f1;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3em 0.8em;
+  border-radius: 999px;
+  margin-top: 0.5rem;
+}
+</style>
+</head>
+<body>
+
+<!-- 未対応ブラウザへの案内 -->
+<div class="unsupported" role="alert">
+  <h3>⚠ ブラウザ非対応</h3>
+  <p>
+    このデモは <strong>Chrome / Edge 142 以上</strong> が必要です。<br>
+    <code>scroll-target-group</code> / <code>:target-current</code> / CSS Anchor Positioning を使用しています。
+  </p>
+  <span class="badge">Chrome 142+ / Edge 142+</span>
+</div>
+
+<!-- サイドナビゲーション -->
+<nav class="nav">
+  <div class="nav-logo">CSS Scroll Spy</div>
+
+  <p class="nav-label">目次</p>
+  <a href="#intro">  <span></span>はじめに</a>
+  <a href="#spec">   <span></span>新しいCSS仕様</a>
+  <a href="#pseudo"> <span></span>疑似クラス 3種</a>
+  <a href="#anchor"> <span></span>アンカーポジション</a>
+  <a href="#support"><span></span>ブラウザ対応</a>
+</nav>
+
+<!-- アクティブインジケーター（Anchor Positioningで位置追従） -->
+<div class="nav-indicator" aria-hidden="true"></div>
+
+<!-- メインコンテンツ -->
+<main>
+
+  <section id="intro">
+    <p class="tag">Section 01</p>
+    <h2>CSSだけの<br>スクロールスパイ</h2>
+    <p class="desc">
+      JavaScriptをいっさい使わず、ピュアCSSのみでスクロール位置に連動したナビゲーションのハイライトを実現します。
+      スクロールコンテナ（<code>html</code>）に <code>scroll-target-group: auto</code> を指定するだけで、
+      ブラウザがアンカーリンクとターゲットセクションの対応を自動的に追跡します。
+    </p>
+  </section>
+
+  <section id="spec">
+    <p class="tag">Section 02</p>
+    <h2>新しいCSS仕様</h2>
+    <p class="desc">
+      <code>scroll-target-group: auto</code> をスクロールコンテナに設定します。
+      するとそのコンテナ内のセクション（<code>id</code> 属性を持つ要素）と、
+      対応するアンカーリンク（<code>href="#id"</code>）が「グループ」として紐付けられ、
+      スクロール位置に応じた疑似クラスが自動で付与されます。
+    </p>
+  </section>
+
+  <section id="pseudo">
+    <p class="tag">Section 03</p>
+    <h2>疑似クラス 3種</h2>
+    <p class="desc">
+      <code>:target-current</code> ─ 現在ビューポートに表示されているセクションのリンク（紫色でハイライト）。<br><br>
+      <code>:target-before</code> ─ すでにスクロールして通過したセクションのリンク（左メニューの ✓ チェックがこれ）。<br><br>
+      <code>:target-after</code> ─ まだ表示されていない下のセクションのリンク。
+    </p>
+  </section>
+
+  <section id="anchor">
+    <p class="tag">Section 04</p>
+    <h2>アンカーポジション<br>との組み合わせ</h2>
+    <p class="desc">
+      <code>:target-current</code> のリンクに <code>anchor-name: --active-link</code> を付与し、
+      別の <code>&lt;div&gt;</code> から <code>position-anchor: --active-link</code> で位置を参照。
+      左メニューのアクティブ背景インジケーターが、アクティブリンクに滑らかに追従します。
+      すべてCSSのみ、JavaScriptゼロです。
+    </p>
+  </section>
+
+  <section id="support">
+    <p class="tag">Section 05</p>
+    <h2>ブラウザ対応状況</h2>
+    <p class="desc">
+      Chrome 142 / Edge 142 以上（2025年リリース）で利用可能です。
+      Firefox・Safariは現時点で未対応のため、本番環境では <code>@supports not (scroll-target-group: auto)</code>
+      によるフォールバック（Intersection Observer など）を組み合わせるのが現実的です。
+    </p>
+  </section>
+
+</main>
+
+</body>
+</html>

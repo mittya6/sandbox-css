@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accordion — CSS Only</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* height: auto へのトランジションを有効化 */
+    html {
+      interpolate-size: allow-keywords;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      background: #f0f0f5;
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      padding: 4rem 1.5rem;
+    }
+
+    .wrapper {
+      width: min(680px, 100%);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1d1d1f;
+      text-align: center;
+      margin-bottom: 0.375rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #6e6e73;
+      font-size: 0.875rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── details ──────────────────────────────────────── */
+
+    details {
+      background: #fff;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.08),
+        0 6px 20px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+    }
+
+    /* ── summary ──────────────────────────────────────── */
+
+    summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      cursor: pointer;
+      list-style: none;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1d1d1f;
+      user-select: none;
+      transition: background-color 0.15s;
+    }
+
+    /* デフォルトの▶アイコンを非表示 */
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary:hover {
+      background-color: #f9f9fb;
+    }
+
+    details[open] > summary {
+      color: #5b5fc7;
+    }
+
+    /* ── Chevron アイコン ──────────────────────────────── */
+
+    .chevron {
+      display: block;
+      flex-shrink: 0;
+      width: 9px;
+      height: 9px;
+      border-right: 2.5px solid #5b5fc7;
+      border-bottom: 2.5px solid #5b5fc7;
+      transform: rotate(45deg);
+      transition: transform 0.35s ease;
+    }
+
+    details[open] .chevron {
+      transform: rotate(225deg);
+    }
+
+    /* ── コンテンツのアニメーション ────────────────────── */
+
+    /* ::details-content 疑似要素でアコーディオン展開を制御 */
+    details::details-content {
+      transition:
+        height 0.35s ease,
+        content-visibility 0.35s allow-discrete;
+      overflow: hidden;
+      height: 0;
+    }
+
+    details[open]::details-content {
+      height: auto;
+    }
+
+    .content {
+      padding: 1rem 1.5rem 1.375rem;
+      color: #3a3a4c;
+      line-height: 1.85;
+      font-size: 0.9375rem;
+      border-top: 1px solid #f0f0f5;
+    }
+
+    code {
+      background: #eeecfc;
+      color: #5b5fc7;
+      padding: 0.1em 0.4em;
+      border-radius: 5px;
+      font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+      font-size: 0.85em;
+    }
+
+    summary code {
+      color: inherit;
+      background: rgba(91, 95, 199, 0.1);
+    }
+
+    details[open] summary code {
+      background: rgba(91, 95, 199, 0.15);
+      color: #5b5fc7;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>よくある質問</h1>
+    <p class="subtitle">CSS Only &mdash; &lt;details&gt; + &lt;summary&gt;</p>
+
+    <!-- name 属性で排他的アコーディオン（同時に1つだけ開く） -->
+    <details name="faq" open>
+      <summary>
+        CSSだけでアコーディオンを実装できますか？
+        <span class="chevron"></span>
+      </summary>
+      <div class="content">
+        はい、実装できます。HTMLの <code>&lt;details&gt;</code> と <code>&lt;summary&gt;</code>
+        要素を組み合わせることで、JavaScriptなしでアコーディオンを作成できます。
+        ブラウザが開閉の状態管理を行うため、キーボード操作やスクリーンリーダーへの
+        アクセシビリティも標準で確保されます。
+      </div>
+    </details>
+
+    <details name="faq">
+      <summary>
+        <code>name</code> 属性を付けると何が変わりますか？
+        <span class="chevron"></span>
+      </summary>
+      <div class="content">
+        同じ <code>name</code> 値を持つ複数の <code>&lt;details&gt;</code> は、
+        同時に開けるのが1つだけに制限されます（排他的アコーディオン）。
+        Chrome 120 / Firefox 130 以降でサポートされています。
+      </div>
+    </details>
+
+    <details name="faq">
+      <summary>
+        開閉アニメーションはどうやって実現しますか？
+        <span class="chevron"></span>
+      </summary>
+      <div class="content">
+        <code>::details-content</code> 疑似要素に <code>height: 0 → auto</code>
+        のトランジションを指定します。<code>html { interpolate-size: allow-keywords; }</code>
+        を加えることで <code>height: auto</code> へのアニメーションが可能になります。
+        閉じる方向のアニメーションには <code>content-visibility</code> への
+        <code>allow-discrete</code> トランジションが必要です。
+      </div>
+    </details>
+
+    <details name="faq">
+      <summary>
+        アクセシビリティは確保されていますか？
+        <span class="chevron"></span>
+      </summary>
+      <div class="content">
+        <code>&lt;details&gt;</code> と <code>&lt;summary&gt;</code>
+        はHTMLの標準要素なので、WAI-ARIAを手動で追加しなくてもスクリーンリーダーや
+        キーボード操作に対応しています。<kbd>Enter</kbd> キーや <kbd>Space</kbd>
+        キーで開閉が可能です。
+      </div>
+    </details>
+
+    <details name="faq">
+      <summary>
+        最初から開いた状態にするには？
+        <span class="chevron"></span>
+      </summary>
+      <div class="content">
+        <code>&lt;details open&gt;</code> のように <code>open</code>
+        属性をHTMLに記述するだけで、ページ読み込み時から展開した状態で表示されます。
+        このデモの最初の項目がその例です。
+      </div>
+    </details>
+  </div>
+</body>
+</html>
